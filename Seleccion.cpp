@@ -11,11 +11,13 @@ struct Estudiante{
 void Leer();
 void Crear();
 void Actualizar();
+void Borrar();
 main(){
 	Leer();
-	//Crear();
-	Actualizar();	
-	 system("pause");
+	Crear();
+	Borrar();
+	Actualizar();
+	system("pause");
 }
 void Leer(){
 	system("cls");
@@ -88,7 +90,34 @@ void Actualizar(){
 		
 	
 	fclose(archivo);
-	Leer();
-	
+	Leer();	
 }
+void Borrar(){
+	const char *nombre_archivo_temp = "archivo_temp.dat";
+	FILE*archivo_temp = fopen(nombre_archivo_temp,"w+b");
+	FILE*archivo = fopen(nombre_archivo,"rb");
+	Estudiante estudiante;
+	int id=0,id_n=0;
+	cout<<"Ingrese el ID a eliminar:";
+	cin>>id;
+	while(fread(&estudiante,sizeof(Estudiante),1,archivo)){
+		if (id_n !=id ){
+			fwrite(&estudiante,sizeof(Estudiante),1,archivo_temp);
+		}
+		id_n++;
+	}
+	fclose(archivo);
+	fclose(archivo_temp);
+	
+	archivo_temp = fopen(nombre_archivo_temp,"rb");
+	archivo = fopen(nombre_archivo,"wb");
+	while(fread(&estudiante,sizeof(Estudiante),1,archivo_temp)){
+		fwrite(&estudiante,sizeof(Estudiante),1,archivo);
+	}
+		fclose(archivo);
+	fclose(archivo_temp);
+	Leer();	
+}
+
+
 
